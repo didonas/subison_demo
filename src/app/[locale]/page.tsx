@@ -1,0 +1,296 @@
+import { getSiteSettings } from "@/lib/settings";
+import { getPublicSpecialities } from "@/lib/public/specialities";
+import { getPublicFacilities } from "@/lib/public/facilities";
+import { getPublicDoctor } from "@/lib/public/doctor";
+import { getPublicTestimonials } from "@/lib/public/testimonials";
+import Link from "next/link";
+import { ArrowRight, Activity, Brain, UserCheck, ShieldCheck, PhoneCall, HeartPulse, Clock, MapPin } from "lucide-react";
+import { FadeIn, FadeUp, SlideIn, StaggerContainer, StaggerItem } from "@/components/ui/animations";
+
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const settings = await getSiteSettings();
+
+  // Fetch verified active content via public services
+  const specialities = await getPublicSpecialities(4);
+  const facilities = await getPublicFacilities(4);
+  const mainDoctor = await getPublicDoctor();
+  const testimonials = await getPublicTestimonials(3);
+
+  return (
+    <div className="flex flex-col w-full overflow-hidden">
+      
+      {/* 1. Hero Section */}
+      <section className="relative w-full bg-primary pt-24 pb-32 overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl">
+            <FadeUp>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+                Advanced Brain and Spine Care with Precision and Compassion
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.2}>
+              <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl">
+                Specialist consultation and modern neurosurgical care at {settings.hospitalName}, Nagercoil.
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.4} className="flex flex-wrap gap-4">
+              <Link href={`/${locale}/contact`} className="bg-accent text-accent-foreground px-8 py-3 rounded-full font-bold hover:bg-accent/90 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-white">
+                Book Appointment
+              </Link>
+              {settings.phone && (
+                <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+                  Call Hospital
+                </a>
+              )}
+              {settings.latitude && settings.longitude && (
+                <a href={`https://www.google.com/maps/dir/?api=1&destination=${settings.latitude},${settings.longitude}`} target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white">
+                  <MapPin className="w-4 h-4" /> Directions
+                </a>
+              )}
+            </FadeUp>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Quick Info Cards (Overlapping Hero) */}
+      <section className="relative z-20 -mt-16 mb-20 container mx-auto px-4">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StaggerItem>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 h-full flex flex-col items-start justify-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">Consultation Hours</h3>
+              <p className="text-gray-600 text-sm whitespace-pre-line">{settings.consultationHours}</p>
+            </div>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 h-full flex flex-col items-start justify-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">Location</h3>
+              <p className="text-gray-600 text-sm">{settings.address}</p>
+            </div>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 h-full flex flex-col items-start justify-center">
+              <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mb-4 text-destructive">
+                <PhoneCall className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">Emergency</h3>
+              <p className="text-gray-600 text-sm mb-2">Available for neurological emergencies.</p>
+              {settings.emergency && <p className="font-bold text-destructive text-xl">{settings.emergency}</p>}
+            </div>
+          </StaggerItem>
+        </StaggerContainer>
+      </section>
+
+      {/* 3. About Preview & 4. Why Choose */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <SlideIn direction="left">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Committed to Neurological Excellence</h2>
+            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+              {settings.hospitalName} is dedicated to providing specialized, evidence-based care for brain and spine disorders. Our approach combines advanced medical knowledge with deep compassion for our patients.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+              <div className="flex gap-3">
+                <ShieldCheck className="w-6 h-6 text-accent shrink-0" />
+                <div>
+                  <h4 className="font-bold text-gray-900">Expert Care</h4>
+                  <p className="text-sm text-gray-600">Specialist neurosurgical expertise.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <UserCheck className="w-6 h-6 text-accent shrink-0" />
+                <div>
+                  <h4 className="font-bold text-gray-900">Patient-Centric</h4>
+                  <p className="text-sm text-gray-600">Personalized treatment plans.</p>
+                </div>
+              </div>
+            </div>
+            <Link href={`/${locale}/about`} className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary/80 transition-colors">
+              Learn more about us <ArrowRight className="w-4 h-4" />
+            </Link>
+          </SlideIn>
+          <SlideIn direction="right">
+            <div className="relative rounded-2xl overflow-hidden aspect-video bg-gray-200 shadow-xl flex items-center justify-center">
+              <p className="text-gray-500 font-medium">Hospital facility image placeholder</p>
+            </div>
+          </SlideIn>
+        </div>
+      </section>
+
+      {/* 5. Doctor Introduction */}
+      {mainDoctor && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <FadeIn>
+              <div className="bg-primary text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                  <Brain className="w-64 h-64" />
+                </div>
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
+                  <div className="md:col-span-1 aspect-square bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                    <p className="text-white/60 font-medium text-sm text-center px-4">Doctor portrait placeholder</p>
+                  </div>
+                  <div className="md:col-span-2">
+                    <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">Our Lead Specialist</span>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">{mainDoctor.name}</h2>
+                    <p className="text-white/80 mb-2 font-medium">{mainDoctor.qualifications}</p>
+                    <p className="text-white/80 mb-6">{mainDoctor.specialisation}</p>
+                    <Link href={`/${locale}/doctor`} className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors">
+                      View Profile <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
+
+      {/* 6. Specialities */}
+      {specialities.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <FadeUp>
+              <div className="text-center mb-16">
+                <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">Expertise</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Medical Specialities</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">Comprehensive diagnosis and treatment for neurological conditions.</p>
+              </div>
+            </FadeUp>
+            
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {specialities.map((spec) => (
+                <StaggerItem key={spec.id}>
+                  <Link href={`/${locale}/specialities/${spec.slug}`} className="block group h-full">
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                      <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <Activity className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold text-primary mb-3">{locale === 'ta' && spec.titleTa ? spec.titleTa : spec.titleEn}</h3>
+                      <div className="mt-auto flex items-center gap-2 text-secondary font-semibold text-sm group-hover:gap-3 transition-all">
+                        Explore <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+            
+            <div className="text-center mt-12">
+              <Link href={`/${locale}/specialities`} className="inline-flex bg-white border border-gray-200 text-primary px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                View All Specialities
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 7. Facilities */}
+      {facilities.length > 0 && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <FadeUp>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">Hospital Facilities</h2>
+            </FadeUp>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {facilities.map((fac) => (
+                <StaggerItem key={fac.id}>
+                  <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center h-full flex flex-col items-center justify-center">
+                    <HeartPulse className="w-8 h-8 text-primary mb-4" />
+                    <h3 className="font-bold text-gray-900">{locale === 'ta' && fac.titleTa ? fac.titleTa : fac.titleEn}</h3>
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
+
+      {/* 8. Patient Journey */}
+      <section className="py-20 bg-primary text-white overflow-hidden relative">
+        <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <FadeUp>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">The Patient Journey</h2>
+              <p className="text-white/80 max-w-2xl mx-auto">What to expect when you visit {settings.hospitalName}.</p>
+            </div>
+          </FadeUp>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-white/20 -translate-y-1/2 z-0"></div>
+            
+            {[
+              { step: "1", title: "Book", desc: "Schedule an appointment easily online or via phone." },
+              { step: "2", title: "Consultation", desc: "Detailed examination and history taking by the specialist." },
+              { step: "3", title: "Diagnosis", desc: "Evidence-based evaluation and diagnostic imaging if needed." },
+              { step: "4", title: "Care Plan", desc: "Personalized treatment and continuous follow-up care." }
+            ].map((s, i) => (
+              <div key={i} className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-xl ring-8 ring-primary">
+                  {s.step}
+                </div>
+                <h3 className="text-xl font-bold mb-3">{s.title}</h3>
+                <p className="text-white/70 text-sm">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Testimonials (Conditional) */}
+      {testimonials.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <FadeUp>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">Patient Stories</h2>
+            </FadeUp>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map(t => (
+                <StaggerItem key={t.id}>
+                  <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <p className="text-gray-600 italic mb-6">&quot;{t.text}&quot;</p>
+                    <div className="font-bold text-primary">{t.patientName}</div>
+                    {t.location && <div className="text-sm text-gray-500">{t.location}</div>}
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
+
+      {/* Final CTA */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <FadeIn>
+            <div className="bg-secondary rounded-3xl p-10 text-center shadow-xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to prioritize your neurological health?</h2>
+              <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto">
+                Schedule a consultation today. Our team is ready to provide the specialized care you need.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link href={`/${locale}/contact`} className="bg-white text-secondary px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg">
+                  Book an Appointment
+                </Link>
+                {settings.phone && (
+                  <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-secondary text-white border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors">
+                    Call {settings.phone}
+                  </a>
+                )}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+    </div>
+  );
+}
