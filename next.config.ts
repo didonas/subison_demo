@@ -3,8 +3,16 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
-const publicAppUrl = process.env.PUBLIC_APP_URL || "http://localhost:3000";
-const cspReportEndpoint = new URL("/api/security/csp-report", publicAppUrl).toString();
+const rawAppUrl = process.env.PUBLIC_APP_URL || "http://localhost:3000";
+const publicAppUrl = rawAppUrl.startsWith("http://") || rawAppUrl.startsWith("https://")
+  ? rawAppUrl
+  : `https://${rawAppUrl}`;
+let cspReportEndpoint = "http://localhost:3000/api/security/csp-report";
+try {
+  cspReportEndpoint = new URL("/api/security/csp-report", publicAppUrl).toString();
+} catch {
+  cspReportEndpoint = `${publicAppUrl.replace(/\/$/, "")}/api/security/csp-report`;
+}
 
 const cspHeader = [
   "default-src 'self'",
