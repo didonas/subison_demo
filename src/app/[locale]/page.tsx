@@ -33,11 +33,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="relative w-full bg-primary pt-24 pb-32 overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
+          <div className={locale === "ta" ? "max-w-4xl" : "max-w-3xl"}>
             <FadeUp>
               <h1 className={`font-bold text-white mb-6 ${
                 locale === "ta" 
-                  ? "text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl leading-[1.3] max-w-3xl" 
+                  ? "text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] 2xl:text-[56px] leading-[1.25] max-w-4xl" 
                   : "text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl leading-[1.15] max-w-3xl"
               }`}>
                 {t("heroTitle")}
