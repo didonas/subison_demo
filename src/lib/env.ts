@@ -1,27 +1,5 @@
 import { z } from "zod";
 
-const isStrongSecret = (val: string) => {
-  if (val.length < 32) return false;
-  if (/^(.)\1+$/.test(val)) return false;
-  const lower = val.toLowerCase();
-  if (lower.includes("changeme") || lower.includes("secret123") || lower.includes("placeholder")) {
-    return false;
-  }
-  return true;
-};
-
-const hex64Regex = /^[a-fA-F0-9]{64}$/;
-
-const DISALLOWED_PLACEHOLDER_DOMAINS = [
-  "example.com",
-  "example.org",
-  "example.net",
-  "placeholder.com",
-  "test.com",
-  "mysite.com",
-  "yourdomain.com",
-];
-
 const envSchema = z
   .object({
     DATABASE_URL: z.string().min(1).default("postgresql://postgres:postgres@localhost:5432/postgres"),

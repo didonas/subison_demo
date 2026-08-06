@@ -13,6 +13,31 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log('--- STARTING IDEMPOTENT SEEDING ---');
 
+  // Compatibility: Ensure legacy columns from initial migration are nullable for CMS schema
+  await prisma.$executeRawUnsafe(`
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Speciality' AND column_name = 'titleEn') THEN
+        ALTER TABLE "Speciality" ALTER COLUMN "titleEn" DROP NOT NULL, ALTER COLUMN "contentEn" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Treatment' AND column_name = 'titleEn') THEN
+        ALTER TABLE "Treatment" ALTER COLUMN "titleEn" DROP NOT NULL, ALTER COLUMN "contentEn" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Facility' AND column_name = 'titleEn') THEN
+        ALTER TABLE "Facility" ALTER COLUMN "titleEn" DROP NOT NULL, ALTER COLUMN "contentEn" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Testimonial' AND column_name = 'patientName') THEN
+        ALTER TABLE "Testimonial" ALTER COLUMN "patientName" DROP NOT NULL, ALTER COLUMN "text" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Article' AND column_name = 'titleEn') THEN
+        ALTER TABLE "Article" ALTER COLUMN "titleEn" DROP NOT NULL, ALTER COLUMN "contentEn" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'FAQ' AND column_name = 'questionEn') THEN
+        ALTER TABLE "FAQ" ALTER COLUMN "questionEn" DROP NOT NULL, ALTER COLUMN "answerEn" DROP NOT NULL;
+      END IF;
+    END $$;
+  `);
+
   // 1. Create All Permissions
   const permissionList = Object.values(ADMIN_PERMISSIONS);
   const createdPerms: Record<string, string> = {};
