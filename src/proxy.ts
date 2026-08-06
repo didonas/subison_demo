@@ -20,6 +20,8 @@ export default auth((req) => {
 });
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  // Match only internationalized and admin pathnames, excluding static assets and internal endpoints
+  matcher: [
+    "/((?!api|_next/static|_next/image|_vercel|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)",
+  ],
 };
