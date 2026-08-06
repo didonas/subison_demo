@@ -35,12 +35,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
             <FadeUp>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+              <h1 className={`font-bold text-white mb-6 ${
+                locale === "ta" 
+                  ? "text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl leading-[1.3] max-w-3xl" 
+                  : "text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl leading-[1.15] max-w-3xl"
+              }`}>
                 {t("heroTitle")}
               </h1>
             </FadeUp>
             <FadeUp delay={0.2}>
-              <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
                 {t("heroSubtitle", { hospitalName: settings.hospitalName })}
               </p>
             </FadeUp>
