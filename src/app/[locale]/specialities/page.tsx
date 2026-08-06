@@ -1,4 +1,5 @@
 import { getPublicSpecialities } from "@/lib/public/specialities";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ArrowRight, Brain } from "lucide-react";
@@ -6,6 +7,7 @@ import Link from "next/link";
 
 export default async function SpecialitiesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "SpecialitiesPage" });
   const specialities = await getPublicSpecialities();
 
   return (
@@ -14,20 +16,20 @@ export default async function SpecialitiesPage({ params }: { params: Promise<{ l
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Clinical Disciplines & Expertise
+              {t("badge")}
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Medical Specialities</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t("title")}</h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Comprehensive diagnosis and advanced surgical care across brain, spine, neurotrauma, and vascular neurology.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
 
         {specialities.length === 0 ? (
           <EmptyState
-            title="Specialities Being Updated"
-            description="Our clinical speciality portfolio is currently being updated to reflect newly available surgical procedures."
-            actionLabel="Inquire with Front Desk"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/contact`}
           />
         ) : (
@@ -49,7 +51,7 @@ export default async function SpecialitiesPage({ params }: { params: Promise<{ l
                         <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed mb-6">{previewText}</p>
                       </div>
                       <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold text-xs sm:text-sm pt-3 border-t border-slate-100 dark:border-slate-800 group-hover:gap-3 transition-all">
-                        Explore Care Details <ArrowRight className="w-4 h-4" />
+                        {t("exploreDetails")} <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </Link>

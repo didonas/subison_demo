@@ -4,6 +4,7 @@ import { Phone, MessageCircle, MapPin, CalendarPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface FloatingActionBarProps {
   phone?: string;
@@ -14,6 +15,7 @@ interface FloatingActionBarProps {
 }
 
 export function FloatingActionBar({ phone, whatsapp, latitude, longitude, locale }: FloatingActionBarProps) {
+  const t = useTranslations("FloatingActionBar");
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -49,10 +51,10 @@ export function FloatingActionBar({ phone, whatsapp, latitude, longitude, locale
           <a
             href={`tel:${phone}`}
             className="flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-full text-white bg-blue-600 hover:opacity-90 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
-            aria-label="Call Hospital"
+            aria-label={t("call")}
           >
             <Phone className="w-5 h-5" />
-            <span className="text-[10px] font-medium mt-0.5">Call</span>
+            <span className="text-[10px] font-medium mt-0.5">{t("call")}</span>
           </a>
         )}
 
@@ -62,10 +64,10 @@ export function FloatingActionBar({ phone, whatsapp, latitude, longitude, locale
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-full text-white bg-green-500 hover:opacity-90 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            aria-label="WhatsApp Hospital"
+            aria-label={t("whatsapp")}
           >
             <MessageCircle className="w-5 h-5" />
-            <span className="text-[10px] font-medium mt-0.5">WhatsApp</span>
+            <span className="text-[10px] font-medium mt-0.5">{t("whatsapp")}</span>
           </a>
         )}
 
@@ -75,20 +77,20 @@ export function FloatingActionBar({ phone, whatsapp, latitude, longitude, locale
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-full text-white bg-indigo-600 hover:opacity-90 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
-            aria-label="Get Directions"
+            aria-label={t("directions")}
           >
             <MapPin className="w-5 h-5" />
-            <span className="text-[10px] font-medium mt-0.5">Directions</span>
+            <span className="text-[10px] font-medium mt-0.5">{t("directions")}</span>
           </a>
         )}
 
         <Link
           href={`/${locale}/appointments/book`}
           className="flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-full text-white bg-red-600 hover:opacity-90 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
-          aria-label="Book Appointment"
+          aria-label={t("book")}
         >
           <CalendarPlus className="w-5 h-5" />
-          <span className="text-[10px] font-medium mt-0.5">Book</span>
+          <span className="text-[10px] font-medium mt-0.5">{t("book")}</span>
         </Link>
       </div>
     </div>

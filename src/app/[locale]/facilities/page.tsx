@@ -1,10 +1,12 @@
 import { getPublicFacilities } from "@/lib/public/facilities";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Building2, HeartPulse, Sparkles } from "lucide-react";
 
 export default async function FacilitiesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "FacilitiesPage" });
   const facilities = await getPublicFacilities();
 
   return (
@@ -13,20 +15,20 @@ export default async function FacilitiesPage({ params }: { params: Promise<{ loc
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Infrastructure & Technology
+              {t("badge")}
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Hospital Facilities</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t("title")}</h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Purpose-built neuro-intensive care, laminar airflow operating theatres, high-precision surgical microscopes, and dedicated rehabilitation units.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
 
         {facilities.length === 0 ? (
           <EmptyState
-            title="Facility Details Under Review"
-            description="Our medical infrastructure, diagnostic suites, and neuro-ICU specifications are currently being updated."
-            actionLabel="Inquire with Front Desk"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/contact`}
           />
         ) : (
@@ -52,7 +54,7 @@ export default async function FacilitiesPage({ params }: { params: Promise<{ loc
                         <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">{desc}</p>
                       </div>
                       <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center text-xs font-semibold text-teal-600 dark:text-teal-400">
-                        <Sparkles className="w-3.5 h-3.5 mr-1" /> Hospital Standard
+                        <Sparkles className="w-3.5 h-3.5 mr-1" /> {t("standard")}
                       </div>
                     </div>
                   </div>

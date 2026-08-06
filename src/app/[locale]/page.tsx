@@ -3,19 +3,28 @@ import { getPublicSpecialities } from "@/lib/public/specialities";
 import { getPublicFacilities } from "@/lib/public/facilities";
 import { getPublicDoctor } from "@/lib/public/doctor";
 import { getPublicTestimonials } from "@/lib/public/testimonials";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { ArrowRight, Activity, Brain, UserCheck, ShieldCheck, PhoneCall, HeartPulse, Clock, MapPin } from "lucide-react";
 import { FadeIn, FadeUp, SlideIn, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const settings = await getSiteSettings();
+  const t = await getTranslations({ locale, namespace: "HomePage" });
+  const settings = await getSiteSettings(locale);
 
   // Fetch verified active content via public services
   const specialities = await getPublicSpecialities(4);
   const facilities = await getPublicFacilities(4);
-  const mainDoctor = await getPublicDoctor();
+  const mainDoctor = await getPublicDoctor(locale);
   const testimonials = await getPublicTestimonials(3);
+
+  const journeySteps = [
+    { step: "1", title: t("step1Title"), desc: t("step1Desc") },
+    { step: "2", title: t("step2Title"), desc: t("step2Desc") },
+    { step: "3", title: t("step3Title"), desc: t("step3Desc") },
+    { step: "4", title: t("step4Title"), desc: t("step4Desc") }
+  ];
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -27,26 +36,26 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="max-w-3xl">
             <FadeUp>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                Advanced Brain and Spine Care with Precision and Compassion
+                {t("heroTitle")}
               </h1>
             </FadeUp>
             <FadeUp delay={0.2}>
               <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl">
-                Specialist consultation and modern neurosurgical care at {settings.hospitalName}, Nagercoil.
+                {t("heroSubtitle", { hospitalName: settings.hospitalName })}
               </p>
             </FadeUp>
             <FadeUp delay={0.4} className="flex flex-wrap gap-4">
               <Link href={`/${locale}/contact`} className="bg-accent text-accent-foreground px-8 py-3 rounded-full font-bold hover:bg-accent/90 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-white">
-                Book Appointment
+                {t("bookAppointment")}
               </Link>
               {settings.phone && (
                 <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
-                  Call Hospital
+                  {t("callHospital")}
                 </a>
               )}
               {settings.latitude && settings.longitude && (
                 <a href={`https://www.google.com/maps/dir/?api=1&destination=${settings.latitude},${settings.longitude}`} target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white">
-                  <MapPin className="w-4 h-4" /> Directions
+                  <MapPin className="w-4 h-4" /> {t("directions")}
                 </a>
               )}
             </FadeUp>
@@ -62,7 +71,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
                 <Clock className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold mb-2">Consultation Hours</h3>
+              <h3 className="text-lg font-bold mb-2">{t("consultationHours")}</h3>
               <p className="text-gray-600 text-sm whitespace-pre-line">{settings.consultationHours}</p>
             </div>
           </StaggerItem>
@@ -71,7 +80,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
                 <MapPin className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold mb-2">Location</h3>
+              <h3 className="text-lg font-bold mb-2">{t("location")}</h3>
               <p className="text-gray-600 text-sm">{settings.address}</p>
             </div>
           </StaggerItem>
@@ -80,8 +89,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mb-4 text-destructive">
                 <PhoneCall className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold mb-2">Emergency</h3>
-              <p className="text-gray-600 text-sm mb-2">Available for neurological emergencies.</p>
+              <h3 className="text-lg font-bold mb-2">{t("emergency")}</h3>
+              <p className="text-gray-600 text-sm mb-2">{t("emergencySubtext")}</p>
               {settings.emergency && <p className="font-bold text-destructive text-xl">{settings.emergency}</p>}
             </div>
           </StaggerItem>
@@ -92,33 +101,33 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <SlideIn direction="left">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Committed to Neurological Excellence</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">{t("aboutTitle")}</h2>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-              {settings.hospitalName} is dedicated to providing specialized, evidence-based care for brain and spine disorders. Our approach combines advanced medical knowledge with deep compassion for our patients.
+              {t("aboutDesc", { hospitalName: settings.hospitalName })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div className="flex gap-3">
                 <ShieldCheck className="w-6 h-6 text-accent shrink-0" />
                 <div>
-                  <h4 className="font-bold text-gray-900">Expert Care</h4>
-                  <p className="text-sm text-gray-600">Specialist neurosurgical expertise.</p>
+                  <h4 className="font-bold text-gray-900">{t("expertCare")}</h4>
+                  <p className="text-sm text-gray-600">{t("expertCareSub")}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <UserCheck className="w-6 h-6 text-accent shrink-0" />
                 <div>
-                  <h4 className="font-bold text-gray-900">Patient-Centric</h4>
-                  <p className="text-sm text-gray-600">Personalized treatment plans.</p>
+                  <h4 className="font-bold text-gray-900">{t("patientCentric")}</h4>
+                  <p className="text-sm text-gray-600">{t("patientCentricSub")}</p>
                 </div>
               </div>
             </div>
             <Link href={`/${locale}/about`} className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary/80 transition-colors">
-              Learn more about us <ArrowRight className="w-4 h-4" />
+              {t("learnMore")} <ArrowRight className="w-4 h-4" />
             </Link>
           </SlideIn>
           <SlideIn direction="right">
             <div className="relative rounded-2xl overflow-hidden aspect-video bg-gray-200 shadow-xl flex items-center justify-center">
-              <p className="text-gray-500 font-medium">Hospital facility image placeholder</p>
+              <p className="text-gray-500 font-medium">{settings.hospitalName}</p>
             </div>
           </SlideIn>
         </div>
@@ -135,15 +144,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </div>
                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
                   <div className="md:col-span-1 aspect-square bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
-                    <p className="text-white/60 font-medium text-sm text-center px-4">Doctor portrait placeholder</p>
+                    <p className="text-white/60 font-medium text-sm text-center px-4">{mainDoctor.name}</p>
                   </div>
                   <div className="md:col-span-2">
-                    <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">Our Lead Specialist</span>
+                    <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">{t("specialistBadge")}</span>
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">{mainDoctor.name}</h2>
                     <p className="text-white/80 mb-2 font-medium">{mainDoctor.qualifications}</p>
                     <p className="text-white/80 mb-6">{mainDoctor.specialisation}</p>
                     <Link href={`/${locale}/doctor`} className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors">
-                      View Profile <ArrowRight className="w-4 h-4" />
+                      {t("viewProfile")} <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>
@@ -159,9 +168,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="container mx-auto px-4">
             <FadeUp>
               <div className="text-center mb-16">
-                <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">Expertise</span>
-                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Medical Specialities</h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">Comprehensive diagnosis and treatment for neurological conditions.</p>
+                <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">{t("specialitiesBadge")}</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{t("specialitiesTitle")}</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">{t("specialitiesSub")}</p>
               </div>
             </FadeUp>
             
@@ -175,7 +184,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       </div>
                       <h3 className="text-xl font-bold text-primary mb-3">{locale === 'ta' && spec.titleTa ? spec.titleTa : spec.titleEn}</h3>
                       <div className="mt-auto flex items-center gap-2 text-secondary font-semibold text-sm group-hover:gap-3 transition-all">
-                        Explore <ArrowRight className="w-4 h-4" />
+                        {t("explore")} <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </Link>
@@ -185,7 +194,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             
             <div className="text-center mt-12">
               <Link href={`/${locale}/specialities`} className="inline-flex bg-white border border-gray-200 text-primary px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-colors shadow-sm">
-                View All Specialities
+                {t("viewAllSpecialities")}
               </Link>
             </div>
           </div>
@@ -197,7 +206,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section className="py-20">
           <div className="container mx-auto px-4">
             <FadeUp>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">Hospital Facilities</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">{t("facilitiesTitle")}</h2>
             </FadeUp>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {facilities.map((fac) => (
@@ -219,20 +228,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4 relative z-10">
           <FadeUp>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">The Patient Journey</h2>
-              <p className="text-white/80 max-w-2xl mx-auto">What to expect when you visit {settings.hospitalName}.</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("journeyTitle")}</h2>
+              <p className="text-white/80 max-w-2xl mx-auto">{t("journeySub", { hospitalName: settings.hospitalName })}</p>
             </div>
           </FadeUp>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
             <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-white/20 -translate-y-1/2 z-0"></div>
             
-            {[
-              { step: "1", title: "Book", desc: "Schedule an appointment easily online or via phone." },
-              { step: "2", title: "Consultation", desc: "Detailed examination and history taking by the specialist." },
-              { step: "3", title: "Diagnosis", desc: "Evidence-based evaluation and diagnostic imaging if needed." },
-              { step: "4", title: "Care Plan", desc: "Personalized treatment and continuous follow-up care." }
-            ].map((s, i) => (
+            {journeySteps.map((s, i) => (
               <div key={i} className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-xl ring-8 ring-primary">
                   {s.step}
@@ -250,15 +254,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <FadeUp>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">Patient Stories</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-12 text-center">{t("testimonialsTitle")}</h2>
             </FadeUp>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map(t => (
-                <StaggerItem key={t.id}>
+              {testimonials.map(item => (
+                <StaggerItem key={item.id}>
                   <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                    <p className="text-gray-600 italic mb-6">&quot;{t.text}&quot;</p>
-                    <div className="font-bold text-primary">{t.patientName}</div>
-                    {t.location && <div className="text-sm text-gray-500">{t.location}</div>}
+                    <p className="text-gray-600 italic mb-6">&quot;{item.text}&quot;</p>
+                    <div className="font-bold text-primary">{item.patientName}</div>
+                    {item.location && <div className="text-sm text-gray-500">{item.location}</div>}
                   </div>
                 </StaggerItem>
               ))}
@@ -272,17 +276,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4">
           <FadeIn>
             <div className="bg-secondary rounded-3xl p-10 text-center shadow-xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to prioritize your neurological health?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">{t("ctaTitle")}</h2>
               <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto">
-                Schedule a consultation today. Our team is ready to provide the specialized care you need.
+                {t("ctaSub")}
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link href={`/${locale}/contact`} className="bg-white text-secondary px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg">
-                  Book an Appointment
+                  {t("ctaBook")}
                 </Link>
                 {settings.phone && (
                   <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-secondary text-white border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors">
-                    Call {settings.phone}
+                    {t("ctaCall", { phone: settings.phone })}
                   </a>
                 )}
               </div>

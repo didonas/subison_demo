@@ -1,4 +1,5 @@
 import { getPublicArticles } from "@/lib/public/articles";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BookOpen, ArrowRight, UserCheck, Stethoscope } from "lucide-react";
@@ -6,6 +7,7 @@ import Link from "next/link";
 
 export default async function PatientResourcesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "PatientResourcesPage" });
   const articles = await getPublicArticles();
 
   return (
@@ -14,13 +16,13 @@ export default async function PatientResourcesPage({ params }: { params: Promise
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Neurology Health Library
+              {t("badge")}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-              Patient Education & Resources
+              {t("title")}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Clinically verified guides and information to help you understand neurological health conditions and treatments.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
@@ -28,9 +30,9 @@ export default async function PatientResourcesPage({ params }: { params: Promise
         {articles.length === 0 ? (
           <EmptyState
             icon={BookOpen}
-            title="Educational Guides in Preparation"
-            description="Our neurology specialists are reviewing and preparing patient health guides. In the meantime, explore our clinical specialities."
-            actionLabel="Explore Specialities"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/specialities`}
             actionIcon={Stethoscope}
           />
@@ -54,16 +56,16 @@ export default async function PatientResourcesPage({ params }: { params: Promise
                       </div>
 
                       <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors leading-snug">{title}</h2>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-1 line-clamp-3 leading-relaxed">{summary || "Read more about this condition and clinical guidance."}</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-1 line-clamp-3 leading-relaxed">{summary || t("defaultSummary")}</p>
 
                       <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                         {article.isMedicalReviewed && (
                           <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                            <UserCheck className="w-3.5 h-3.5" /> Medically Reviewed
+                            <UserCheck className="w-3.5 h-3.5" /> {t("medicallyReviewed")}
                           </span>
                         )}
                         <span className="flex items-center gap-1 font-semibold text-teal-600 dark:text-teal-400 group-hover:gap-2 transition-all ml-auto">
-                          Read Guide <ArrowRight className="w-3.5 h-3.5" />
+                          {t("readGuide")} <ArrowRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
                     </div>

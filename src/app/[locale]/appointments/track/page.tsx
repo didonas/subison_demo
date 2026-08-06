@@ -1,5 +1,6 @@
 import { Search, ShieldCheck, Clock, Calendar, UserCheck } from "lucide-react";
 import { trackAppointmentStatus, TrackingResult } from "@/lib/appointments/service";
+import { getTranslations } from "next-intl/server";
 
 export default async function TrackAppointmentPage({ 
   params,
@@ -10,6 +11,7 @@ export default async function TrackAppointmentPage({
 }) {
   const { locale } = await params;
   const { ref, mobile } = await searchParams;
+  const t = await getTranslations({ locale, namespace: "AppointmentsPage" });
 
   let trackingResult: TrackingResult | null = null;
 
@@ -31,11 +33,11 @@ export default async function TrackAppointmentPage({
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-            Real-Time Tracking
+            {t("trackBadge")}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Track Your Appointment</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">{t("trackTitle")}</h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-            Enter your booking reference and registered mobile number to check the current status of your appointment request.
+            {t("trackSubtitle")}
           </p>
         </div>
 

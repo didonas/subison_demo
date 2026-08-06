@@ -1,10 +1,12 @@
 import { getPublicFaqs } from "@/lib/public/faqs";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { HelpCircle, ChevronDown, MessageSquare } from "lucide-react";
 
 export default async function FaqsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "FaqsPage" });
   const faqs = await getPublicFaqs();
 
   // Group by category
@@ -16,13 +18,13 @@ export default async function FaqsPage({ params }: { params: Promise<{ locale: s
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Patient Knowledge Base
+              {t("badge")}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-              Frequently Asked Questions
+              {t("title")}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Find answers to common questions about consultations, diagnostic procedures, treatments, and appointments.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
@@ -30,9 +32,9 @@ export default async function FaqsPage({ params }: { params: Promise<{ locale: s
         {faqs.length === 0 ? (
           <EmptyState
             icon={HelpCircle}
-            title="Knowledge Base Updating"
-            description="Our clinical team is updating frequently asked questions. Have an immediate question? Feel free to reach out directly."
-            actionLabel="Contact Clinic"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/contact`}
             actionIcon={MessageSquare}
           />

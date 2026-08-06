@@ -1,4 +1,5 @@
 import { getPublicTreatments } from "@/lib/public/treatments";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Activity, ArrowRight } from "lucide-react";
@@ -6,6 +7,7 @@ import Link from "next/link";
 
 export default async function TreatmentsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "TreatmentsPage" });
   const treatments = await getPublicTreatments();
 
   return (
@@ -14,32 +16,32 @@ export default async function TreatmentsPage({ params }: { params: Promise<{ loc
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Specialized Interventions & Surgery
+              {t("badge")}
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Treatments & Procedures</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t("title")}</h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Advanced neurosurgical, microscopic, and minimally invasive procedures designed for patient safety and expedited recovery.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
 
         {treatments.length === 0 ? (
           <EmptyState
-            title="Procedures Being Updated"
-            description="Clinical treatment descriptions and surgical protocols are currently being reviewed by our medical board."
-            actionLabel="Contact Care Desk"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/contact`}
           />
         ) : (
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            {treatments.map((t) => {
-              const title = locale === "ta" && t.titleTa ? t.titleTa : t.titleEn;
-              const desc = locale === "ta" && t.contentTa ? t.contentTa : t.contentEn;
+            {treatments.map((item) => {
+              const title = locale === "ta" && item.titleTa ? item.titleTa : item.titleEn;
+              const desc = locale === "ta" && item.contentTa ? item.contentTa : item.contentEn;
               const previewText = (desc || "").substring(0, 150) + "...";
 
               return (
-                <StaggerItem key={t.id}>
-                  <Link href={`/${locale}/treatments/${t.slug}`} className="group block h-full">
+                <StaggerItem key={item.id}>
+                  <Link href={`/${locale}/treatments/${item.slug}`} className="group block h-full">
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-elevation-sm card-hover h-full flex flex-col justify-between">
                       <div className="flex items-start gap-5">
                         <div className="w-12 h-12 bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 rounded-2xl flex items-center justify-center shrink-0 border border-teal-100 dark:border-teal-900 group-hover:scale-105 transition-transform">
@@ -55,7 +57,7 @@ export default async function TreatmentsPage({ params }: { params: Promise<{ loc
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold text-xs sm:text-sm pt-2 group-hover:gap-3 transition-all border-t border-slate-100 dark:border-slate-800 mt-2">
-                        Procedure Overview & Recovery <ArrowRight className="w-4 h-4" />
+                        {t("exploreDetails")} <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </Link>

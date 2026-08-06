@@ -6,7 +6,7 @@ interface HeaderProps {
 }
 
 export async function Header({ locale }: HeaderProps) {
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings(locale);
 
   return (
     <HeaderClient 

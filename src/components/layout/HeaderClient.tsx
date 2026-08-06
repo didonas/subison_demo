@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter, Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Menu, X, Globe, Phone, CalendarCheck, ChevronDown, BookOpen, MessageSquare, HelpCircle, Image as ImageIcon, Video } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -13,6 +14,7 @@ interface HeaderClientProps {
 }
 
 export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps) {
+  const t = useTranslations("Navigation");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
@@ -75,21 +77,21 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
   };
 
   const mainNavLinks = [
-    { href: `/`, label: "Home" },
-    { href: `/about`, label: "About" },
-    { href: `/doctor`, label: "Doctor" },
-    { href: `/specialities`, label: "Specialities" },
-    { href: `/treatments`, label: "Treatments" },
-    { href: `/facilities`, label: "Facilities" },
-    { href: `/contact`, label: "Contact" },
+    { href: `/`, label: t("home") },
+    { href: `/about`, label: t("about") },
+    { href: `/doctor`, label: t("doctor") },
+    { href: `/specialities`, label: t("specialities") },
+    { href: `/treatments`, label: t("treatments") },
+    { href: `/facilities`, label: t("facilities") },
+    { href: `/contact`, label: t("contact") },
   ];
 
   const moreLinks = [
-    { href: `/patient-resources`, label: "Patient Resources", icon: BookOpen },
-    { href: `/testimonials`, label: "Patient Stories", icon: MessageSquare },
-    { href: `/faqs`, label: "FAQs & Guidance", icon: HelpCircle },
-    { href: `/gallery`, label: "Facility Gallery", icon: ImageIcon },
-    { href: `/videos`, label: "Educational Videos", icon: Video },
+    { href: `/patient-resources`, label: t("patientResources"), icon: BookOpen },
+    { href: `/testimonials`, label: t("testimonials"), icon: MessageSquare },
+    { href: `/faqs`, label: t("faqs"), icon: HelpCircle },
+    { href: `/gallery`, label: t("gallery"), icon: ImageIcon },
+    { href: `/videos`, label: t("videos"), icon: Video },
   ];
 
   return (
@@ -109,7 +111,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
             </div>
             <div className="hidden sm:block">
               <span className="font-bold text-base sm:text-lg text-slate-900 dark:text-white leading-tight block">{hospitalName}</span>
-              <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Advanced Brain & Spine Center</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">{t("subtitle")}</span>
             </div>
           </Link>
 
@@ -140,7 +142,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
                 className="text-sm font-semibold px-3 py-2 rounded-xl transition-colors focus-ring text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-50 dark:hover:bg-slate-900 flex items-center gap-1"
                 aria-expanded={isMoreDropdownOpen}
               >
-                More <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMoreDropdownOpen ? "rotate-180" : ""}`} />
+                {t("more")} <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMoreDropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
               <AnimatePresence>
@@ -207,8 +209,8 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
                 <a
                   href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
                   className="p-2.5 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors focus-ring"
-                  aria-label="Call Hospital Desk"
-                  title="Call Hospital Desk"
+                  aria-label={t("callHospital")}
+                  title={t("callHospital")}
                 >
                   <Phone className="w-4 h-4" />
                 </a>
@@ -218,7 +220,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
                 className="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition focus-ring shadow-medical-teal"
               >
                 <CalendarCheck className="w-4 h-4" />
-                Book Appt
+                {t("bookAppt")}
               </Link>
             </div>
 
@@ -251,7 +253,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
               {/* Mobile Lang Switcher */}
               <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800">
                 <span className="font-semibold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-teal-600 dark:text-teal-400"/> Language / மொழி
+                  <Globe className="w-4 h-4 text-teal-600 dark:text-teal-400"/> {t("language")} / மொழி
                 </span>
                 <div className="flex items-center bg-slate-200/70 dark:bg-slate-800 rounded-full p-1">
                   <button
@@ -271,7 +273,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
 
               {/* Mobile Primary Nav Links */}
               <nav className="flex flex-col gap-1.5">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Navigation</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">{t("navigation")}</span>
                 {mainNavLinks.map((link) => {
                   const isActive = pathname === link.href || (link.href !== `/` && pathname.startsWith(link.href));
                   return (
@@ -290,7 +292,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
                   );
                 })}
 
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mt-4 mb-1">Resources & Media</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mt-4 mb-1">{t("resourcesAndMedia")}</span>
                 {moreLinks.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname.startsWith(item.href);
@@ -319,14 +321,14 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-3.5 rounded-xl text-center font-bold text-base w-full flex justify-center items-center gap-2 shadow-medical-teal"
                 >
-                  <CalendarCheck className="w-5 h-5" /> Book Consultation
+                  <CalendarCheck className="w-5 h-5" /> {t("bookConsultation")}
                 </Link>
                 {phone && (
                   <a
                     href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
                     className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 py-3.5 rounded-xl text-center font-bold text-base w-full flex justify-center items-center gap-2"
                   >
-                    <Phone className="w-5 h-5" /> Call Hospital ({phone})
+                    <Phone className="w-5 h-5" /> {t("callHospital")} ({phone})
                   </a>
                 )}
               </div>

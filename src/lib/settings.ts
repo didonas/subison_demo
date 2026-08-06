@@ -15,45 +15,89 @@ export type HospitalSettings = {
   socialLinks: Record<string, string>;
 };
 
-const DEFAULT_SETTINGS: HospitalSettings = {
+const DEFAULT_SETTINGS_EN: HospitalSettings = {
   hospitalName: "Subison Neuro Centre",
-  address: "Contact information is being updated.",
+  address: "Subison Neuro Centre, Kanyakumari Main Road, Nagercoil, Tamil Nadu 629001",
   phone: "+91 63836 36281",
   whatsapp: "+91 63836 36281",
   emergency: "+91 63836 36281",
   email: "contact@subisonneuro.com",
-  consultationHours: "Timings unavailable.",
-  appointmentFee: "Fee unavailable.",
-  latitude: "",
-  longitude: "",
+  consultationHours: "Monday to Saturday, 6:00 PM to 10:00 PM",
+  appointmentFee: "₹200",
+  latitude: "8.1592044",
+  longitude: "77.4085451",
   socialLinks: {},
 };
 
-export async function getSiteSettings(): Promise<HospitalSettings> {
+const DEFAULT_SETTINGS_TA: HospitalSettings = {
+  hospitalName: "சுபிசன் நியூரோ சென்டர்",
+  address: "சுபிசன் நியூரோ சென்டர், கன்னியாகுமரி மெயின் ரோடு, நாகர்கோவில், தமிழ்நாடு 629001",
+  phone: "+91 63836 36281",
+  whatsapp: "+91 63836 36281",
+  emergency: "+91 63836 36281",
+  email: "contact@subisonneuro.com",
+  consultationHours: "திங்கள் முதல் சனி வரை, மாலை 6:00 மணி முதல் இரவு 10:00 மணி வரை",
+  appointmentFee: "ரூ. 200",
+  latitude: "8.1592044",
+  longitude: "77.4085451",
+  socialLinks: {},
+};
+
+function cleanValue(raw: string | undefined): string {
+  if (!raw) return "";
+  try {
+    const parsed = JSON.parse(raw);
+    if (typeof parsed === "string") return parsed;
+    return String(parsed);
+  } catch {
+    return raw;
+  }
+}
+
+export async function getSiteSettings(locale?: string): Promise<HospitalSettings> {
+  const isTa = locale === "ta";
+  const defaults = isTa ? DEFAULT_SETTINGS_TA : DEFAULT_SETTINGS_EN;
+
   try {
     const settings = await prisma.siteSetting.findMany();
     
     // Convert array of {key, value} to an object map
     const map: Record<string, string> = {};
     settings.forEach(s => {
-      map[s.key] = s.value;
+      map[s.key] = cleanValue(s.value);
     });
 
+    const hospitalName = isTa
+      ? (map["hospitalName_ta"] || map["hospitalName"] || defaults.hospitalName)
+      : (map["hospitalName"] || defaults.hospitalName);
+
+    const address = isTa
+      ? (map["address_ta"] || map["address"] || defaults.address)
+      : (map["address"] || defaults.address);
+
+    const consultationHours = isTa
+      ? (map["consultationHours_ta"] || map["consultationHours"] || defaults.consultationHours)
+      : (map["consultationHours"] || defaults.consultationHours);
+
+    const appointmentFee = isTa
+      ? (map["appointmentFee_ta"] || (map["appointmentFee"] ? `ரூ. ${map["appointmentFee"].replace(/[^0-9]/g, '')}` : defaults.appointmentFee))
+      : (map["appointmentFee"] ? (map["appointmentFee"].startsWith("₹") ? map["appointmentFee"] : `₹${map["appointmentFee"]}`) : defaults.appointmentFee);
+
     return {
-      hospitalName: map["hospitalName"] || DEFAULT_SETTINGS.hospitalName,
-      address: map["address"] || DEFAULT_SETTINGS.address,
-      phone: map["phone"] || DEFAULT_SETTINGS.phone,
-      whatsapp: map["whatsapp"] || DEFAULT_SETTINGS.whatsapp,
-      emergency: map["emergency"] || DEFAULT_SETTINGS.emergency,
-      email: map["email"] || DEFAULT_SETTINGS.email,
-      consultationHours: map["consultationHours"] || DEFAULT_SETTINGS.consultationHours,
-      appointmentFee: map["appointmentFee"] || DEFAULT_SETTINGS.appointmentFee,
-      latitude: map["latitude"] || DEFAULT_SETTINGS.latitude,
-      longitude: map["longitude"] || DEFAULT_SETTINGS.longitude,
-      socialLinks: map["socialLinks"] ? JSON.parse(map["socialLinks"]) : DEFAULT_SETTINGS.socialLinks,
+      hospitalName,
+      address,
+      phone: map["phone"] || defaults.phone,
+      whatsapp: map["whatsapp"] || defaults.whatsapp,
+      emergency: map["emergencyPhone"] || map["emergency"] || defaults.emergency,
+      email: map["email"] || defaults.email,
+      consultationHours,
+      appointmentFee,
+      latitude: map["latitude"] || (map["locationCoordinates"] ? map["locationCoordinates"].split(",")[0].trim() : defaults.latitude),
+      longitude: map["longitude"] || (map["locationCoordinates"] ? map["locationCoordinates"].split(",")[1]?.trim() || defaults.longitude : defaults.longitude),
+      socialLinks: map["socialLinks"] ? JSON.parse(map["socialLinks"]) : defaults.socialLinks,
     };
   } catch (error) {
     console.error("Failed to load site settings:", error);
-    return DEFAULT_SETTINGS;
+    return defaults;
   }
 }

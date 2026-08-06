@@ -1,4 +1,5 @@
 import { getSiteSettings } from "@/lib/settings";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, Globe } from "lucide-react";
 
@@ -7,7 +8,8 @@ interface FooterProps {
 }
 
 export async function Footer({ locale }: FooterProps) {
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings(locale);
+  const t = await getTranslations({ locale, namespace: "Footer" });
   
   const currentYear = new Date().getFullYear();
 
@@ -24,7 +26,7 @@ export async function Footer({ locale }: FooterProps) {
               <span className="font-bold text-xl text-white block">{settings.hospitalName}</span>
             </div>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-              Specialist neurosurgical consultations, minimally invasive spine surgery, stroke interventions, and dedicated neuro-rehabilitation.
+              {t("desc")}
             </p>
             <div className="flex gap-3">
               {settings.socialLinks?.facebook && (
@@ -47,21 +49,21 @@ export async function Footer({ locale }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">Clinical Services</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">{t("clinicalServices")}</h3>
             <ul className="flex flex-col gap-2.5 text-sm">
-              <li><Link href={`/${locale}/about`} className="text-slate-400 hover:text-white transition-colors">About the Centre</Link></li>
-              <li><Link href={`/${locale}/doctor`} className="text-slate-400 hover:text-white transition-colors">Consultant Neurosurgeon</Link></li>
-              <li><Link href={`/${locale}/specialities`} className="text-slate-400 hover:text-white transition-colors">Specialities & Care</Link></li>
-              <li><Link href={`/${locale}/treatments`} className="text-slate-400 hover:text-white transition-colors">Surgical Procedures</Link></li>
-              <li><Link href={`/${locale}/facilities`} className="text-slate-400 hover:text-white transition-colors">Hospital Infrastructure</Link></li>
-              <li><Link href={`/${locale}/patient-resources`} className="text-slate-400 hover:text-white transition-colors">Patient Guidance Library</Link></li>
-              <li><Link href={`/${locale}/testimonials`} className="text-slate-400 hover:text-white transition-colors">Patient Testimonials</Link></li>
+              <li><Link href={`/${locale}/about`} className="text-slate-400 hover:text-white transition-colors">{t("aboutCentre")}</Link></li>
+              <li><Link href={`/${locale}/doctor`} className="text-slate-400 hover:text-white transition-colors">{t("consultantNeurosurgeon")}</Link></li>
+              <li><Link href={`/${locale}/specialities`} className="text-slate-400 hover:text-white transition-colors">{t("specialitiesAndCare")}</Link></li>
+              <li><Link href={`/${locale}/treatments`} className="text-slate-400 hover:text-white transition-colors">{t("surgicalProcedures")}</Link></li>
+              <li><Link href={`/${locale}/facilities`} className="text-slate-400 hover:text-white transition-colors">{t("hospitalInfrastructure")}</Link></li>
+              <li><Link href={`/${locale}/patient-resources`} className="text-slate-400 hover:text-white transition-colors">{t("patientGuidanceLibrary")}</Link></li>
+              <li><Link href={`/${locale}/testimonials`} className="text-slate-400 hover:text-white transition-colors">{t("patientTestimonials")}</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">Hospital Location</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">{t("hospitalLocation")}</h3>
             <ul className="flex flex-col gap-4">
               <li className="flex gap-3 text-slate-400">
                 <MapPin className="w-5 h-5 shrink-0 text-teal-400 mt-0.5" />
@@ -88,17 +90,17 @@ export async function Footer({ locale }: FooterProps) {
 
           {/* Timings */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">OPD Timings</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-teal-400 mb-5">{t("opdTimings")}</h3>
             <ul className="flex flex-col gap-4">
               <li className="flex gap-3 text-slate-400">
                 <Clock className="w-5 h-5 shrink-0 text-teal-400 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-white mb-1">Outpatient Clinic</p>
+                  <p className="text-sm font-semibold text-white mb-1">{t("outpatientClinic")}</p>
                   <p className="text-sm text-slate-400 whitespace-pre-line leading-relaxed">{settings.consultationHours}</p>
                 </div>
               </li>
               <li className="mt-2 bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
-                <p className="text-xs text-slate-400 font-medium mb-1">Standard Consultation Fee</p>
+                <p className="text-xs text-slate-400 font-medium mb-1">{t("consultationFee")}</p>
                 <p className="font-bold text-lg text-teal-400">{settings.appointmentFee}</p>
               </li>
             </ul>
@@ -107,11 +109,11 @@ export async function Footer({ locale }: FooterProps) {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>&copy; {currentYear} {settings.hospitalName}. All rights reserved.</p>
+          <p>&copy; {currentYear} {settings.hospitalName}. {t("allRightsReserved")}</p>
           <div className="flex items-center gap-6">
-            <Link href={`/${locale}/faqs`} className="hover:text-slate-400 transition-colors">FAQs</Link>
-            <Link href={`/${locale}/privacy`} className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
-            <Link href={`/${locale}/terms`} className="hover:text-slate-400 transition-colors">Terms of Service</Link>
+            <Link href={`/${locale}/faqs`} className="hover:text-slate-400 transition-colors">{t("faqs")}</Link>
+            <Link href={`/${locale}/privacy`} className="hover:text-slate-400 transition-colors">{t("privacyPolicy")}</Link>
+            <Link href={`/${locale}/terms`} className="hover:text-slate-400 transition-colors">{t("termsOfService")}</Link>
           </div>
         </div>
       </div>

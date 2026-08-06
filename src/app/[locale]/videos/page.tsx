@@ -1,10 +1,12 @@
 import { getPublicVideos } from "@/lib/public/videos";
+import { getTranslations } from "next-intl/server";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Video, BookOpen } from "lucide-react";
 
 export default async function VideosPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "VideosPage" });
   const videos = await getPublicVideos();
 
   return (
@@ -13,13 +15,13 @@ export default async function VideosPage({ params }: { params: Promise<{ locale:
         <FadeUp>
           <div className="text-center mb-12 sm:mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50 px-3 py-1.5 rounded-full inline-block mb-3">
-              Clinical Media & Education
+              {t("badge")}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-              Patient Health Videos & Doctor Talks
+              {t("title")}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Watch informative video explanations on stroke prevention, headache management, epilepsy awareness, and neurological wellness.
+              {t("subtitle")}
             </p>
           </div>
         </FadeUp>
@@ -27,9 +29,9 @@ export default async function VideosPage({ params }: { params: Promise<{ locale:
         {videos.length === 0 ? (
           <EmptyState
             icon={Video}
-            title="Educational Videos Coming Soon"
-            description="Our neurologists are recording clinical guidance videos for patient education. In the meantime, explore our written patient health guides."
-            actionLabel="Read Patient Guides"
+            title={t("emptyTitle")}
+            description={t("emptyDesc")}
+            actionLabel={t("emptyAction")}
             actionHref={`/${locale}/patient-resources`}
             actionIcon={BookOpen}
           />
