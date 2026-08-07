@@ -5,6 +5,7 @@ import { getPublicDoctor } from "@/lib/public/doctor";
 import { getPublicTestimonials } from "@/lib/public/testimonials";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Activity, Brain, UserCheck, ShieldCheck, PhoneCall, HeartPulse, Clock, MapPin } from "lucide-react";
 import { FadeIn, FadeUp, SlideIn, StaggerContainer, StaggerItem } from "@/components/ui/animations";
 
@@ -33,36 +34,53 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="relative w-full bg-primary pt-24 pb-32 overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className={locale === "ta" ? "max-w-4xl" : "max-w-3xl"}>
-            <FadeUp>
-              <h1 className={`font-bold text-white mb-6 ${
-                locale === "ta" 
-                  ? "text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] 2xl:text-[56px] leading-[1.25] max-w-4xl" 
-                  : "text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl leading-[1.15] max-w-3xl"
-              }`}>
-                {t("heroTitle")}
-              </h1>
-            </FadeUp>
-            <FadeUp delay={0.2}>
-              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
-                {t("heroSubtitle", { hospitalName: settings.hospitalName })}
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.4} className="flex flex-wrap gap-4">
-              <Link href={`/${locale}/contact`} className="bg-accent text-accent-foreground px-8 py-3 rounded-full font-bold hover:bg-accent/90 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-white">
-                {t("bookAppointment")}
-              </Link>
-              {settings.phone && (
-                <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
-                  {t("callHospital")}
-                </a>
-              )}
-              {settings.latitude && settings.longitude && (
-                <a href={`https://www.google.com/maps/dir/?api=1&destination=${settings.latitude},${settings.longitude}`} target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white">
-                  <MapPin className="w-4 h-4" /> {t("directions")}
-                </a>
-              )}
-            </FadeUp>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div className={`lg:col-span-7 ${locale === "ta" ? "max-w-4xl" : "max-w-3xl"}`}>
+              <FadeUp>
+                <h1 className={`font-bold text-white mb-6 ${
+                  locale === "ta" 
+                    ? "text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] 2xl:text-[56px] leading-[1.25] max-w-4xl" 
+                    : "text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl leading-[1.15] max-w-3xl"
+                }`}>
+                  {t("heroTitle")}
+                </h1>
+              </FadeUp>
+              <FadeUp delay={0.2}>
+                <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
+                  {t("heroSubtitle", { hospitalName: settings.hospitalName })}
+                </p>
+              </FadeUp>
+              <FadeUp delay={0.4} className="flex flex-wrap gap-4">
+                <Link href={`/${locale}/contact`} className="bg-accent text-accent-foreground px-8 py-3 rounded-full font-bold hover:bg-accent/90 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-white">
+                  {t("bookAppointment")}
+                </Link>
+                {settings.phone && (
+                  <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+                    {t("callHospital")}
+                  </a>
+                )}
+                {settings.latitude && settings.longitude && (
+                  <a href={`https://www.google.com/maps/dir/?api=1&destination=${settings.latitude},${settings.longitude}`} target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white">
+                    <MapPin className="w-4 h-4" /> {t("directions")}
+                  </a>
+                )}
+              </FadeUp>
+            </div>
+
+            <div className="lg:col-span-5 w-full">
+              <FadeUp delay={0.3}>
+                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/4.4] min-h-[320px] sm:min-h-[400px] lg:min-h-[480px] xl:min-h-[500px] overflow-hidden rounded-[28px] shadow-2xl">
+                  <Image
+                    src="/images/home/hero-neuro-centre.webp"
+                    alt="Neurosurgery and advanced brain and spine care"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 46vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              </FadeUp>
+            </div>
           </div>
         </div>
       </section>
