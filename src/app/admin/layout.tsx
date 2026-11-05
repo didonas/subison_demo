@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin Portal | Subison Neuro Centre",
+  title: "Admin Portal | Hospital",
   description: "Administrative Portal for Hospital Operations and Patient Care",
   robots: {
     index: false,

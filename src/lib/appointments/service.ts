@@ -368,7 +368,7 @@ export async function bookAppointment(data: AppointmentFormData) {
         await sendNotification("EMAIL", "APPOINTMENT_REQUEST_RECEIVED", {
           to: result.email,
           subject: `Appointment Request Received: ${result.bookingReference}`,
-          text: `Dear ${result.patientName},\n\nWe have received your appointment request (Ref: ${result.bookingReference}).\nOur hospital administrator will review and confirm your slot shortly.\n\nThank you,\nSubison Neuro Centre`
+          text: `Dear ${result.patientName},\n\nWe have received your appointment request (Ref: ${result.bookingReference}).\nOur hospital administrator will review and confirm your slot shortly.\n\nThank you,\nHospital`
         });
       }
 
@@ -612,19 +612,19 @@ export async function transitionAppointmentStatus(options: StatusTransitionOptio
         await sendNotification("EMAIL", "APPOINTMENT_CONFIRMED", {
           to: result.current.email,
           subject: `Appointment Confirmed: ${result.current.bookingReference}`,
-          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) with ${result.current.doctor.name} on ${result.newDateObj.toISOString().split("T")[0]} at ${result.newTimeStr} has been CONFIRMED.\n\nThank you,\nSubison Neuro Centre`
+          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) with ${result.current.doctor.name} on ${result.newDateObj.toISOString().split("T")[0]} at ${result.newTimeStr} has been CONFIRMED.\n\nThank you,\nHospital`
         });
       } else if (options.targetStatus === "RESCHEDULED") {
         await sendNotification("EMAIL", "APPOINTMENT_RESCHEDULED", {
           to: result.current.email,
           subject: `Appointment Rescheduled: ${result.current.bookingReference}`,
-          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) has been RESCHEDULED to ${result.newDateObj.toISOString().split("T")[0]} at ${result.newTimeStr}.\n\nThank you,\nSubison Neuro Centre`
+          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) has been RESCHEDULED to ${result.newDateObj.toISOString().split("T")[0]} at ${result.newTimeStr}.\n\nThank you,\nHospital`
         });
       } else if (options.targetStatus === "CANCELLED" || options.targetStatus === "REJECTED") {
         await sendNotification("EMAIL", "APPOINTMENT_CANCELLED", {
           to: result.current.email,
           subject: `Appointment Update: ${result.current.bookingReference}`,
-          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) has been ${options.targetStatus.toLowerCase()}.\n\nReason/Notes: ${options.notes || "Not specified"}\n\nThank you,\nSubison Neuro Centre`
+          text: `Dear ${result.current.patientName},\n\nYour appointment (Ref: ${result.current.bookingReference}) has been ${options.targetStatus.toLowerCase()}.\n\nReason/Notes: ${options.notes || "Not specified"}\n\nThank you,\nHospital`
         });
       }
     }

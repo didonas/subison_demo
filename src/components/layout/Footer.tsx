@@ -21,7 +21,7 @@ export async function Footer({ locale }: FooterProps) {
           <div>
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                <span className="text-white font-bold text-lg">SNC</span>
+                <span className="text-white font-bold text-lg">H</span>
               </div>
               <span className="font-bold text-xl text-white block">{settings.hospitalName}</span>
             </div>

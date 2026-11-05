@@ -26,7 +26,7 @@ export class ResendProvider implements NotificationProvider {
       const response = await this.resend.emails.send({
         from: env.RESEND_FROM_EMAIL,
         to: message.to,
-        subject: message.subject || "Notification from Subison Neuro Centre",
+        subject: message.subject || "Notification from Hospital",
         text: message.text,
         html: message.html,
       });

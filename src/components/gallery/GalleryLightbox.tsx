@@ -80,7 +80,7 @@ export function GalleryLightbox({ items, locale }: GalleryLightboxProps) {
       {/* Grid of gallery cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {items.map((item, index) => {
-          const alt = (locale === "ta" && item.altTextTa) ? item.altTextTa : (item.altTextEn || "Subison Neuro Centre Facility");
+          const alt = (locale === "ta" && item.altTextTa) ? item.altTextTa : (item.altTextEn || "Hospital Facility");
           const caption = (locale === "ta" && item.captionTa) ? item.captionTa : item.captionEn;
 
           return (
@@ -159,7 +159,7 @@ export function GalleryLightbox({ items, locale }: GalleryLightboxProps) {
             <div className="relative w-full aspect-[4/3] max-h-[70vh] rounded-2xl overflow-hidden shadow-2xl bg-black">
               <Image
                 src={selectedItem.publicUrl}
-                alt={(locale === "ta" && selectedItem.altTextTa) ? selectedItem.altTextTa : (selectedItem.altTextEn || "Subison Neuro Centre")}
+                alt={(locale === "ta" && selectedItem.altTextTa) ? selectedItem.altTextTa : (selectedItem.altTextEn || "Hospital")}
                 fill
                 sizes="100vw"
                 className="object-contain"

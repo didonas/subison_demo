@@ -1,9 +1,9 @@
 {
   "Index": {
-    "title": "Subison Neuro Centre"
+    "title": "Hospital"
   },
   "Metadata": {
-    "title": "Subison Neuro Centre",
+    "title": "Hospital",
     "description": "Comprehensive neurological, neurosurgical, and spine care led by Dr. C. Subbiah in Nagercoil."
   },
   "Navigation": {
@@ -97,7 +97,7 @@
   },
   "AboutPage": {
     "badge": "Institutional Heritage & Philosophy",
-    "title": "About Subison Neuro Centre",
+    "title": "About Hospital",
     "subtitle": "Dedicated to compassionate, world-class neurological diagnosis, minimally invasive neurosurgery, and patient-centered recovery.",
     "hospitalSub": "Comprehensive Neuro, Spine, Trauma & Stroke Management Centre",
     "missionTitle": "Our Mission",
@@ -189,7 +189,7 @@
   "TestimonialsPage": {
     "badge": "Patient Experiences",
     "title": "Patient Stories & Testimonials",
-    "subtitle": "Real experiences from patients who have received neurological care and diagnostic services at Subison Neuro Centre.",
+    "subtitle": "Real experiences from patients who have received neurological care and diagnostic services at Hospital.",
     "verifiedConsent": "Verified Consent",
     "emptyTitle": "Patient Testimonials Updating",
     "emptyDesc": "Patient testimonials are undergoing clinical verification and consent confirmation prior to publication.",

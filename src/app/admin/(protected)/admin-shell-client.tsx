@@ -236,7 +236,7 @@ export function AdminShellClient({ admin, permissions, children }: AdminShellCli
               <Stethoscope className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-sm text-white tracking-tight">Subison Neuro</div>
+              <div className="font-bold text-sm text-white tracking-tight">Hospital</div>
               <div className="text-[11px] text-slate-400">Operations & CMS</div>
             </div>
           </Link>

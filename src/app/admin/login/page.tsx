@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
           </div>
         </div>
         <h1 className="text-center text-2xl font-bold tracking-tight text-white">
-          Subison Neuro Centre
+          Hospital
         </h1>
         <p className="mt-1 text-center text-sm text-slate-400">
           Hospital Operations & Staff Portal

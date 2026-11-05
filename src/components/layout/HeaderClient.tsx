@@ -113,7 +113,7 @@ export function HeaderClient({ hospitalName, phone, locale }: HeaderClientProps)
             <div className="flex shrink-0 items-center min-w-0">
               <Link href={`/`} className="flex items-center gap-3 focus-ring rounded-xl p-1 -m-1 max-w-[260px] min-w-0">
                 <div className="w-10 h-10 bg-teal-600 dark:bg-teal-500 rounded-xl flex items-center justify-center shrink-0 shadow-sm text-white font-bold text-lg">
-                  <span>SNC</span>
+                  <span>H</span>
                 </div>
                 <div className="min-w-0 overflow-hidden">
                   <span className="font-bold text-base xl:text-lg text-slate-900 dark:text-white leading-tight block whitespace-nowrap truncate">

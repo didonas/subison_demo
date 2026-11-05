@@ -16,8 +16,8 @@ export type HospitalSettings = {
 };
 
 const DEFAULT_SETTINGS_EN: HospitalSettings = {
-  hospitalName: "Subison Neuro Centre",
-  address: "Subison Neuro Centre, Kanyakumari Main Road, Nagercoil, Tamil Nadu 629001",
+  hospitalName: "Hospital",
+  address: "Hospital, Kanyakumari Main Road, Nagercoil, Tamil Nadu 629001",
   phone: "+91 63836 36281",
   whatsapp: "+91 63836 36281",
   emergency: "+91 63836 36281",
@@ -30,8 +30,8 @@ const DEFAULT_SETTINGS_EN: HospitalSettings = {
 };
 
 const DEFAULT_SETTINGS_TA: HospitalSettings = {
-  hospitalName: "சுபிசன் நியூரோ சென்டர்",
-  address: "சுபிசன் நியூரோ சென்டர், கன்னியாகுமரி மெயின் ரோடு, நாகர்கோவில், தமிழ்நாடு 629001",
+  hospitalName: "மருத்துவமனை",
+  address: "மருத்துவமனை, கன்னியாகுமரி மெயின் ரோடு, நாகர்கோவில், தமிழ்நாடு 629001",
   phone: "+91 63836 36281",
   whatsapp: "+91 63836 36281",
   emergency: "+91 63836 36281",

@@ -314,13 +314,13 @@ async function main() {
 
   // 9. Initial Site Settings
   const initialSettings = {
-    hospitalName: 'Subison Neuro Centre',
+    hospitalName: 'Hospital',
     phone: '+91 63836 36281',
     emergencyPhone: '+91 63836 36281',
     consultationHours: 'Monday to Saturday, 6:00 PM to 10:00 PM',
     appointmentFee: '200',
     locationCoordinates: '8.1592044, 77.4085451',
-    address: 'Subison Neuro Centre, Kanyakumari Main Road, Nagercoil, Tamil Nadu 629001',
+    address: 'Hospital, Kanyakumari Main Road, Nagercoil, Tamil Nadu 629001',
     email: 'contact@subisonneuro.com',
   };
 

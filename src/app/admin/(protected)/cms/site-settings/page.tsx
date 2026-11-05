@@ -37,7 +37,7 @@ export default async function SiteSettingsAdminPage() {
           <div className="space-y-2 text-xs">
             <div className="flex justify-between py-1.5 border-b border-slate-800/40">
               <span className="text-slate-400">Hospital Name:</span>
-              <span className="text-white font-medium">{settings?.hospitalName || "Subison Neuro Centre"}</span>
+              <span className="text-white font-medium">{settings?.hospitalName || "Hospital"}</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-slate-800/40">
               <span className="text-slate-400">Emergency Phone:</span>
